@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>KLEOS BRANDS | Operations Dashboard</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+
+    body{
+      background:#f3f4f6;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .pill {
+      display:inline-block;
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .tab-active {
+      background:black !important;
+      color:white !important;
+      box-shadow:0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .glass {
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(12px);
+    }
+
+    .menu-dropdown{
+      display:none;
+    }
+
+    .menu-dropdown.show{
+      display:block;
+    }
+
+  </style>
+
+</head>
+
+<body class="min-h-screen">
+
+<!-- ================================= -->
+<!-- LOGIN SCREEN -->
+<!-- ================================= -->
+
+<div id="loginScreen"
+class="fixed inset-0 bg-gradient-to-br from-gray-100 via-white to-gray-200 flex items-center justify-center z-50">
+
+  <div class="glass px-12 py-14 rounded-[38px] shadow-2xl w-[430px] border border-gray-200">
+
+    <!-- COMPANY -->
+
+    <div class="text-center mb-14">
+
+      <h1 class="text-6xl font-black tracking-tight text-black leading-none">
+        KLEOS
+      </h1>
+
+      <p class="text-sm tracking-[10px] text-gray-500 mt-3 font-semibold">
+        BRANDS
+      </p>
+
+    </div>
+
+    <!-- LOGIN SECTION -->
+
+    <div class="mb-7 text-center">
+
+      <div class="w-20 h-[2px] bg-black rounded-full mx-auto mb-5"></div>
+
+      <h2 class="text-lg font-bold text-gray-800 mb-2 tracking-wide">
+        Order Tracker
+      </h2>
+
+      <p class="text-gray-400 text-sm">
+        Enter your assigned user
+      </p>
+
+    </div>
+
+    <!-- INPUT -->
+
+    <input
+  id="userInput"
+  type="text"
+  placeholder="User"
+  class="w-full border border-gray-300 px-4 py-3 rounded-xl mb-3 text-sm focus:outline-none focus:ring-2 focus:ring-black shadow-sm"
+/>
+
+    <!-- BUTTON -->
+
+  <button
+  onclick="login()"
+  class="w-full bg-black text-white py-3 rounded-xl font-semibold hover:bg-gray-800 transition duration-300 shadow-lg tracking-[3px] text-sm">
+
+  ACCESS
+
+</button>
+
+    <!-- ERROR -->
+
+    <p id="loginError"
+      class="text-red-500 mt-5 hidden text-center font-semibold text-sm">
+
+      Invalid user
+
+    </p>
+
+    <!-- FOOTER -->
+
+    <div class="mt-12 text-center">
+
+      <p class="text-[10px] text-gray-400 tracking-[2px] uppercase leading-5">
+
+        © 2026 KLEOS BRANDS<br>
+        Internal Operations System
+
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ================================= -->
+<!-- DASHBOARD -->
+<!-- ================================= -->
+
+<div id="dashboard" class="hidden">
+
+  <!-- ================================= -->
+  <!-- HEADER -->
+  <!-- ================================= -->
+
+  <div class="bg-black text-white px-8 py-5 shadow-2xl">
+
+    <div class="flex justify-between items-center">
+
+      <!-- LEFT -->
+
+      <div class="flex items-center gap-5">
+
+        <!-- MENU -->
+
+        <div class="relative">
+
+          <button
+            onclick="toggleMenu()"
+            class="text-3xl font-bold hover:opacity-80 transition">
+
+            ⋮
+
+          </button>
+
+          <!-- DROPDOWN -->
+
+          <div
+            id="menuDropdown"
+            class="menu-dropdown absolute top-12 left-0 bg-white text-black rounded-2xl shadow-2xl w-48 overflow-hidden z-50">
+
+            <button
+              onclick="logout()"
+              class="w-full text-left px-5 py-4 hover:bg-gray-100 transition font-semibold">
+
+              Logout
+
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- LOGO -->
+
+        <div>
+
+          <h1 class="text-4xl font-black tracking-tight leading-none">
+            KLEOS
+          </h1>
+
+          <p class="text-xs tracking-[6px] text-gray-300 mt-1">
+            BRANDS
+          </p>
+
+        </div>
+
+      </div>
+
+      <!-- RIGHT -->
+
+      <div class="text-right">
+
+        <p class="text-lg font-semibold">
+          Operations Dashboard
+        </p>
+
+        <p class="text-gray-400 text-sm">
+          Real-time operational tracking
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- MAIN -->
+
+  <div class="p-8">
+
+    <!-- KPI -->
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+      <div class="bg-white rounded-3xl shadow-lg p-6 border-l-8 border-blue-500">
+
+        <p class="text-gray-500 text-sm font-semibold">
+          ACTIVE ORDERS
+        </p>
+
+        <h2 id="activeCount"
+          class="text-5xl font-black text-blue-600 mt-3">
+          0
+        </h2>
+
+      </div>
+
+      <div class="bg-white rounded-3xl shadow-lg p-6 border-l-8 border-orange-500">
+
+        <p class="text-gray-500 text-sm font-semibold">
+          ORDERS IN WAREHOUSE
+        </p>
+
+        <h2 id="whsCount"
+          class="text-5xl font-black text-orange-500 mt-3">
+          0
+        </h2>
+
+      </div>
+
+      <div class="bg-white rounded-3xl shadow-lg p-6 border-l-8 border-green-500">
+
+        <p class="text-gray-500 text-sm font-semibold">
+          UPCOMING ETAS
+        </p>
+
+        <h2 id="etaCount"
+          class="text-5xl font-black text-green-600 mt-3">
+          0
+        </h2>
+
+      </div>
+
+    </div>
+
+    <!-- TABS -->
+
+    <div class="flex gap-3 mb-6">
+
+      <button
+        onclick="showTab('activeOrders', this)"
+        class="tabButton tab-active px-6 py-3 rounded-2xl transition font-semibold">
+
+        Active Orders
+
+      </button>
+
+      <button
+        onclick="showTab('warehouseOrders', this)"
+        class="tabButton bg-white text-black px-6 py-3 rounded-2xl transition font-semibold shadow">
+
+        Orders In WHS
+
+      </button>
+
+    </div>
+
+    <!-- ================================= -->
+    <!-- ACTIVE -->
+    <!-- ================================= -->
+
+    <div id="activeOrders" class="tab">
+
+      <input
+        id="searchActive"
+        class="w-full p-4 mb-4 border rounded-2xl shadow-sm"
+        placeholder="Search Active Orders..."
+      >
+
+      <table class="w-full bg-white rounded-2xl overflow-hidden shadow">
+
+        <thead class="bg-gray-100 text-gray-700">
+
+          <tr>
+
+            <th class="p-4 text-left">Order Number</th>
+
+            <th class="p-4 text-left">Business Unit</th>
+
+            <th class="p-4 text-left">Distribution Center</th>
+
+            <th class="p-4 text-left">Active Days</th>
+
+            <th class="p-4 text-left">ETA</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="activeTable"></tbody>
+
+      </table>
+
+    </div>
+
+    <!-- ================================= -->
+    <!-- WAREHOUSE -->
+    <!-- ================================= -->
+
+    <div id="warehouseOrders" class="tab hidden">
+
+      <input
+        id="searchWHS"
+        class="w-full p-4 mb-4 border rounded-2xl shadow-sm"
+        placeholder="Search Warehouse Orders..."
+      >
+
+      <!-- STAGE 7 -->
+
+      <div class="bg-orange-100 text-orange-800 font-bold p-4 rounded-2xl mb-3 shadow-sm">
+
+        🟠 Pending Payment Orders
+
+      </div>
+
+      <table class="w-full bg-white rounded-2xl overflow-hidden mb-6 shadow">
+
+        <thead class="bg-gray-100">
+
+          <tr>
+
+            <th class="p-4 text-left">Order</th>
+
+            <th class="p-4 text-left">Business Unit</th>
+
+            <th class="p-4 text-left">Distribution Center</th>
+
+            <th class="p-4 text-left">Days in WHS</th>
+
+            <th class="p-4 text-left">Status</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="stage7Table"></tbody>
+
+      </table>
+
+      <!-- STAGE 8 -->
+
+      <div class="bg-green-100 text-green-800 font-bold p-4 rounded-2xl mb-3 shadow-sm">
+
+        🟢 Released Orders
+
+      </div>
+
+      <table class="w-full bg-white rounded-2xl overflow-hidden shadow">
+
+        <thead class="bg-gray-100">
+
+          <tr>
+
+            <th class="p-4 text-left">Order</th>
+
+            <th class="p-4 text-left">Business Unit</th>
+
+            <th class="p-4 text-left">Distribution Center</th>
+
+            <th class="p-4 text-left">Days in WHS</th>
+
+            <th class="p-4 text-left">Status</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="stage8Table"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ================================= -->
+<!-- JAVASCRIPT -->
+<!-- ================================= -->
+
+<script>
+
+let globalData = [];
+
+// =================================
+// LOGIN
+// =================================
+
+function login() {
+
+  const user =
+    document.getElementById("userInput")
+    .value
+    .trim();
+
+  fetch(`http://127.0.0.1:8000/orders/${user}`)
+
+    .then(r => {
+
+      if (!r.ok) {
+        throw new Error();
+      }
+
+      return r.json();
+
+    })
+
+    .then(data => {
+
+      globalData = data;
+
+      document.getElementById("loginScreen")
+        .classList.add("hidden");
+
+      document.getElementById("dashboard")
+        .classList.remove("hidden");
+
+      loadDashboard(data);
+
+    })
+
+    .catch(() => {
+
+      document.getElementById("loginError")
+        .classList.remove("hidden");
+
+    });
+
+}
+
+// =================================
+// LOGOUT
+// =================================
+
+function logout(){
+
+  location.reload();
+
+}
+
+// =================================
+// MENU
+// =================================
+
+function toggleMenu(){
+
+  document.getElementById("menuDropdown")
+    .classList.toggle("show");
+
+}
+
+// =================================
+// ENTER KEY
+// =================================
+
+document.addEventListener("keypress", function(e){
+
+  if(e.key === "Enter"){
+    login();
+  }
+
+});
+
+// =================================
+// TAB
+// =================================
+
+function showTab(tabId, button) {
+
+  document.querySelectorAll('.tab')
+    .forEach(t => t.classList.add('hidden'));
+
+  document.getElementById(tabId)
+    .classList.remove('hidden');
+
+  document.querySelectorAll('.tabButton')
+    .forEach(b => {
+
+      b.classList.remove('tab-active');
+      b.classList.add('bg-white','text-black');
+
+    });
+
+  button.classList.add('tab-active');
+
+}
+
+// =================================
+// DATE FORMAT
+// =================================
+
+function formatDate(d) {
+
+  if (!d || d === "NaT") return "-";
+
+  const date = new Date(d);
+
+  return isNaN(date)
+    ? "-"
+    : date.toLocaleDateString("en-GB");
+
+}
+
+// =================================
+// ACTIVE DAYS COLORS
+// =================================
+
+function actDaysColor(days) {
+
+  let color =
+    days <= 10
+      ? "bg-green-100 text-green-700"
+      : days <= 18
+      ? "bg-orange-100 text-orange-700"
+      : "bg-red-100 text-red-700";
+
+  return `
+    <span class="pill ${color}">
+      ${days} days
+    </span>
+  `;
+
+}
+
+// =================================
+// STATUS WHS
+// =================================
+
+function getStatus(days) {
+
+  if (days < 10) {
+
+    return `
+      <span class="pill bg-green-100 text-green-700">
+        SAFE
+      </span>
+    `;
+
+  }
+
+  if (days < 14) {
+
+    return `
+      <span class="pill bg-yellow-100 text-yellow-700">
+        WARNING
+      </span>
+    `;
+
+  }
+
+  return `
+    <span class="pill bg-red-100 text-red-700">
+      EXTRA STORAGE
+    </span>
+  `;
+
+}
+
+// =================================
+// LOAD DASHBOARD
+// =================================
+
+function loadDashboard(data){
+
+  // ACTIVE
+
+  const active =
+    data.filter(o => o.Source === "ACT");
+
+  document.getElementById("activeCount")
+    .innerText = active.length;
+
+  const etaValid =
+    active.filter(o => o.ETA && o.ETA !== "NaT");
+
+  document.getElementById("etaCount")
+    .innerText = etaValid.length;
+
+  document.getElementById("activeTable").innerHTML =
+
+    active.map(o => {
+
+      let days =
+        Number(o["ACT DAYS"] || 0);
+
+      return `
+
+        <tr class="border-b hover:bg-gray-50">
+
+          <td class="p-4 font-semibold">
+            ${o["Order Number"] || ""}
+          </td>
+
+          <td class="p-4">
+            ${o["Business Unit"] || o["Business Unit "] || ""}
+          </td>
+
+          <td class="p-4">
+            ${o["Distribution center"] || ""}
+          </td>
+
+          <td class="p-4">
+            ${actDaysColor(days)}
+          </td>
+
+          <td class="p-4">
+
+            <span class="pill bg-blue-100 text-blue-700 text-base px-4 py-2">
+
+              ${formatDate(o["ETA"])}
+
+            </span>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    }).join("");
+
+  // WHS
+
+  const whs =
+    data.filter(o => o.Source === "IN WHS");
+
+  document.getElementById("whsCount")
+    .innerText = whs.length;
+
+  const stage7 =
+    whs.filter(o => String(o.Stage).includes("7"));
+
+  const stage8 =
+    whs.filter(o => String(o.Stage).includes("8"));
+
+  function build(id, arr){
+
+    document.getElementById(id).innerHTML =
+
+      arr.map(o => {
+
+        let days =
+          Number(o["DAYS IN WHS"] || o["DAYS IN WHS "] || 0);
+
+        return `
+
+          <tr class="border-b hover:bg-gray-50">
+
+            <td class="p-4 font-semibold">
+              ${o["Order Number"] || ""}
+            </td>
+
+            <td class="p-4">
+              ${o["Business Unit"] || o["Business Unit "] || ""}
+            </td>
+
+            <td class="p-4">
+              ${o["Distribution center"] || ""}
+            </td>
+
+            <td class="p-4">
+              ${days}
+            </td>
+
+            <td class="p-4">
+              ${getStatus(days)}
+            </td>
+
+          </tr>
+
+        `;
+
+      }).join("");
+
+  }
+
+  build("stage7Table", stage7);
+  build("stage8Table", stage8);
+
+  // SEARCH ACTIVE
+
+  document.getElementById("searchActive")
+    .addEventListener("input", e => {
+
+      const val =
+        e.target.value.toLowerCase();
+
+      document.querySelectorAll("#activeTable tr")
+        .forEach(r => {
+
+          r.style.display =
+            r.innerText.toLowerCase().includes(val)
+            ? ""
+            : "none";
+
+        });
+
+    });
+
+  // SEARCH WHS
+
+  document.getElementById("searchWHS")
+    .addEventListener("input", e => {
+
+      const val =
+        e.target.value.toLowerCase();
+
+      document.querySelectorAll("#stage7Table tr, #stage8Table tr")
+        .forEach(r => {
+
+          r.style.display =
+            r.innerText.toLowerCase().includes(val)
+            ? ""
+            : "none";
+
+        });
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
