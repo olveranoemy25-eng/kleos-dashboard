@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 import os
+import requests
 
 app = FastAPI()
 
@@ -20,12 +21,20 @@ app.add_middleware(
 # FILE PATH
 # =================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-FILE = os.path.join(BASE_DIR, "REPORTE KLEOS SEMANAL.xlsx")
+URL = "https://1drv.ms/x/c/9d22324991230ea2/IQAxxnWEM1ifTrJ2E6gvNF8ZAe1ct52Tv20VjsCRFRZP6SE?e=Gx6BXW"
+FILE = "/tmp/reporte.xlsx"  
 
 # =================================
 # LOAD DATA (CLEAN VERSION)
 # =================================
+def download_file():
+    r = requests.get(URL)
+    with open(FILE, "wb") as f:
+        f.write(r.content)
+
 def load_data():
+
+download_file()
 
     act = pd.read_excel(FILE, sheet_name="ACT")
     in_whs = pd.read_excel(FILE, sheet_name="IN WHS")
