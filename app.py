@@ -29,10 +29,18 @@ URL = "https://1drv.ms/x/c/9d22324991230ea2/IQAxxnWEM1ifTrJ2E6gvNF8ZAe1ct52Tv20V
 # LOAD DATA (CLEAN VERSION)
 # =================================
 def download_file():
-    r = requests.get(URL)
-    with open(FILE, "wb") as f:
-        f.write(r.content)
+    try:
+        r = requests.get(URL, timeout=20)
 
+        # ❌ evita HTML (lo que te está rompiendo pandas)
+        if "html" in r.headers.get("Content-Type", ""):
+            raise Exception("OneDrive link no es directo")
+
+        with open(FILE, "wb") as f:
+            f.write(r.content)
+
+    except Exception as e:
+        print("Download error:", e)
 
 def load_data():
 
@@ -92,7 +100,9 @@ def get_orders(user: str):
     # LOAD DATA
     df = load_data()
 
-    # FILTER BY CUSTOMER
+    if df.empty:
+        return {"error": "No data loaded"}
+
     df.columns = df.columns.str.strip()
 
     filtered = df[
