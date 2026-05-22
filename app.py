@@ -23,7 +23,7 @@ app.add_middleware(
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FILE = "/tmp/reporte.xlsx"  
 
-URL = "https://1drv.ms/x/c/9d22324991230ea2/IQAxxnWEM1ifTrJ2E6gvNF8ZAe1ct52Tv20VjsCRFRZP6SE?e=uZclaQ"
+URL = "https://1drv.ms/x/c/9d22324991230ea2/IQAxxnWEM1ifTrJ2E6gvNF8ZAe1ct52Tv20VjsCRFRZP6SE?e=lh1TFK&download=1"
 
 # =================================
 # LOAD DATA (CLEAN VERSION)
