@@ -21,8 +21,9 @@ app.add_middleware(
 # FILE PATH
 # =================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-URL = "https://1drv.ms/x/c/9d22324991230ea2/IQAxxnWEM1ifTrJ2E6gvNF8ZAe1ct52Tv20VjsCRFRZP6SE?e=Gx6BXW"
 FILE = "/tmp/reporte.xlsx"  
+
+URL = "https://1drv.ms/x/c/9d22324991230ea2/IQAxxnWEM1ifTrJ2E6gvNF8ZAe1ct52Tv20VjsCRFRZP6SE?e=uZclaQ"
 
 # =================================
 # LOAD DATA (CLEAN VERSION)
@@ -32,10 +33,10 @@ def download_file():
     with open(FILE, "wb") as f:
         f.write(r.content)
 
+
 def load_data():
 
-download_file()
-
+    download_file()
     act = pd.read_excel(FILE, sheet_name="ACT")
     in_whs = pd.read_excel(FILE, sheet_name="IN WHS")
     out_whs = pd.read_excel(FILE, sheet_name="LT OUT WHS")
